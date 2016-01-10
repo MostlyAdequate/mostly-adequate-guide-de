@@ -120,4 +120,4 @@ Wir möchten die Theorie nutzen, in der alle Teile so gut zusammen passen. Wir w
 
 Wir haben schon einen Funken unseres funktionalen Polarsterns gesehen, aber wir müssen erst ein paar konkrete Konzepte verstehen bevor wir unsere Reise wirklich beginnen können.
 
-[Chapter 2: First Class Functions](ch2.md)
+[Kapitel 2: Funktionen Erster Klasse](ch2-de.md)
