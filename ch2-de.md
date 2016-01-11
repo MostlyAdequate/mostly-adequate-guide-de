@@ -1,9 +1,9 @@
-# Kapitel 2: Functionen Erster Klasse
+# Kapitel 2: Funktionen Erster Klasse
 
-## Ein kurzer Rückblickk
-Wenn wir sagen, Funktionen sind "Erster Klasse" meinen wir, dass sie wie alle anderen sind...also normaler Klasse (Herr Schaffner?). Wir können Funktionen wie jeden anderen Datentype verwenden und es gibt keine Sonderlockenn an ihnen - sie können in Arrays gespeichert werden, herumgereicht werden, Variablen zugeordnet werden, was immer Du willst.
+## Ein kurzer Rückblick
+Wenn wir sagen, Funktionen sind "Erster Klasse" (First Class Functions) meinen wir, dass sie wie alle anderen Daten sind... also normaler Klasse (ähhh Trainer?). Wir können Funktionen wie jeden anderen Datentyp verwenden und es gibt nichts Besonderes an ihnen - sie können in Arrays gespeichert werden, herumgereicht werden, Variablen zugewiesen werden, was immer Du willst.
 
-Das sind JavaScript Grundlagen, aber es sollte erwähnt werden, dass eine kurze Suche auf Github das kollektive Vermeiden oder viemehr die weitverbreitete Ignoranz dieses Konzepts.Sollen wir uns ein vorgetäuschtes Beispiel ansehen? Ja sollten wir.
+Das sind JavaScript Grundlagen. Aber es sollte erwähnt werden, dass eine kurze Suche auf Github das kollektive Vermeiden oder viemehr die weitverbreitete Ignoranz dieses Konzepts aufzeigt. Sollen wir uns ein scherzhaftes Beispiel ansehen? Ja sollten wir.
 
 ```js
 var hi = function(name){
@@ -15,7 +15,7 @@ var greeting = function(name) {
 };
 ```
 
-Hier ist der Funktion Wrapper um `hi`in `greeting` komplett redundant. Warum? Weil Funktionen in JavaScript *aufrufbar* sind. Wenn `hi` mit `()` am Ende aufgerufen wird, läuft die Funktion durch und gibt einen Wert zurück. Wenn die Klammern fehlen, wird lediglich die Funktion, die in der Variable gespeichert ist, zurück gegeben. Nur um sicher zu gehen, wirf mal einen Blick darauf:
+Hier ist der Funktion Wrapper um `hi`in `greeting` völlig unnötig. Warum? Weil Funktionen in JavaScript *aufrufbar* sind. Wenn man `hi` mit `()` am Ende aufruft, wird die Funktion ausgeführt und gibt einen Wert zurück. Fehlen aber die Klammern, wird lediglich die Funktion, die in der Variable gespeichert ist, zurück gegeben. Nur um sicher zu gehen, noch kurz das hier... :
 
 ```js
 hi;
@@ -27,7 +27,7 @@ hi("jonas");
 // "Hi jonas"
 ```
 
-Weil `greeting` nichts anderes tut, als `hi`mit dem selben Argument aufzurufen, können wir genauso schreiben:
+Weil `greeting` also nichts anderes tut, als `hi`mit dem selben Argument aufzurufen, können wir genauso gut schreiben:
 
 ```js
 var greeting = hi;
@@ -37,11 +37,11 @@ greeting("times");
 // "Hi times"
 ```
 
-Mit anderen Worten, `hi` ist bereits eine Funktion, die ein Argument erwartet, warum sollten wir eine andere Funktion darum packen, die schlicht `hi` mit dem dummen Argument aufruft? Es mahct einfach keinen Sinn. Es ist so, als wolle man seinen schwersten Parka im heißesten Juli, nur um die Luft zu verdrängen und einen gekühlten Lolly zu bestellen.
+Mit anderen Worten, `hi` ist bereits eine Funktion, die ein Argument erwartet, warum sollten wir eine weitere Funktion darum packen, die schlicht `hi` mit dem einen Argument aufruft? Es macht einfach keinen Sinn. Das wäre so, als zöge man den schwersten Parka im heißesten Juli an, nur um die Luft zu verdrängen und einen gekühlten Lolly zu bestellen.
 
-Es ist widerlich verbos und, wie könnte es anders sein, ein schlechter Stil eine Funktion mit einer anderen Funktion zu umgeben, nur um ihre Verarbeitung zu verzögern. (Wir werden noch sehen warum, aber es hat was mit Wartbarkeit zu tun.)
+Es ist gerade zu widerlich verbos und, wie könnte es anders sein, ein schlechter Stil eine Funktion mit einer anderen Funktion zu umgeben, nur um ihre Verarbeitung zu verzögern. (Wir werden noch sehen warum, aber es hat was mit Wartbarkeit zu tun.)
 
-Ein solides Verständnis dieses Konzepts ist extrem wichtig, bevor es weitergeht. Deshalb untersuchen wir noch ein paar Beispiele aus den Tiefen des npm repositories.
+Ein solides Verständnis dieses Konzepts ist extrem wichtig, bevor wir weiter machen. Deshalb untersuchen wir noch ein paar Beispiele aus den Tiefen des npm Repositories.
 
 ```js
 // ignorant
@@ -51,14 +51,14 @@ var getServerStuff = function(callback){
   });
 };
 
-// enlightened
+// erhaben
 var getServerStuff = ajaxCall;
 ```
 
-Die Welt ist zugemüllt mit ajax coder der genau so aussieht. Hier sieht man, warum beide varianten gleich sind.
+Die Welt ist zugemüllt mit ajax code der genau so aussieht. Hier sieht man, warum beide varianten gleich sind.
 
 ```js
-// diese Zeile
+// diese Zeilen
 return ajaxCall(function(json){
   return callback(json);
 });
@@ -75,7 +75,7 @@ var getServerStuff = function(callback){
 var getServerStuff = ajaxCall; // <-- guck Mutti, keine Klammern
 ```
 
-Und so wird's gemacht Leute. Jetzt nocheinmal, damit wir sehen warum ich so darauf herumreite.
+Und so wird's gemacht Leute. Jetzt nochmal, damit ihr erkennt warum ich so darauf herumreite.
 
 ```js
 var BlogController = (function() {
@@ -105,7 +105,7 @@ var BlogController = (function() {
 })();
 ```
 
-Dieser witzige Controller besteht zu 99% aus heißer Luft. Wir könnten genaus schreiben:
+Dieser lachhafte Controller besteht zu 99% aus heißer Luft. Wir könnten ebenso schreiben:
 
 ```js
 var BlogController = {
@@ -119,9 +119,9 @@ var BlogController = {
 
 ...oder alles zusammen gemantsch, macht das nichts anderes als unser Views und Db zu bündeln.
 
-## Warum wir die erste Klasse bevorzugen?
+## Warum die erste Klasse bevorzugen?
 
-Okey, lass uns anschauen, warum wir first class Funktionen bevorzugen. Wie uns die Beispiele `getServerStuff` und `BlogController` Beispiele gezeigt haben, passiert es schnell, dass man man Funktionsverschachtelungen aufbaut, die keinen Mehrwert haben und nur den Aufwand der Wartung erhöhen.
+Okay, mal sehen, warum wir First Class Functions bevorzugen sollten. Wie uns die Beispiele `getServerStuff` und `BlogController` gezeigt haben, baut man schnell Funktionsverschachtelungen auf, die keinen Mehrwert haben und nur den Aufwand der Wartung erhöhen.
 
 Zusätzlich  müssen wir eine einbettende Funktion auch ändern, wenn sich die eingebettete Funktion ändert.
 
@@ -140,10 +140,10 @@ httpGet('/post/2', function(json, err){
 });
 ```
 
-Wenn wir das als eine first class function geschrieben, wären viel weniger Änderungen nötig gewesen.
+Wenn wir das als eine first class function geschrieben hätten, wären viel weniger Änderungen nötig gewesen.
 
 ```js
-// renderPost wird aus httpGet heraus mit wer so wieviel Argumenten wie es will aufgerufen
+// renderPost wird aus httpGet heraus mit wer weiß wieviel Argumenten aufgerufen
 httpGet('/post/2', renderPost);
 ```
 
@@ -167,9 +167,9 @@ var compact = function(xs) {
 };
 ```
 
-In dem wir spezifische namen vergeben, haben wir uns selbst an spezifische daten gebunden (in diesem Fall `articles`). Das passiert nur allzuofft und ist der Grnd für häufiges neuerfinden.
+In dem wir spezifische Namen vergeben, haben wir uns selbst an spezifische Daten gebunden (in diesem Fall `articles`). Das passiert nur allzuofft und ist der Grund für häufiges neuerfinden.
 
-Ich muss erwähnen, dass genauso wie im Objekt-Orientierten Code, man aufpassen muss, nicht vom 'this in die Halsschlagader gebissen zu werden. Wenn eine zugrundeliegende Funktion `this` verwendet, werden wir Opfer des Zorns einer undichten Abstraktion.
+Es muss erwähnt werden, dass man genauso wie in der Objekt-Orientierten Schreibweise aufpassen muss, nicht vom `this` in die Halsschlagader gebissen zu werden. Wenn eine zugrundeliegende Funktion `this` verwendet, werden wir Opfer einer undichten Abstraktion.
 
 ```js
 var fs = require('fs');
@@ -182,10 +182,10 @@ fs.readFile('freaky_friday.txt', Db.save.bind(Db));
 
 ```
 
-Wenn es an sich selbst gebunden ist, kann `Db` frei auf seinen schrottigen Code zugreifen. Ich meide `this` wie eine dreckige Windel. Dafür gibt es keinen Grund, wenn man funktionalen Code schreibt. Wie dem auch sei, wenn Du andere Libraries verwendest, musst Du die bescheuerte Welt um uns akzeptieren.
+Wenn es an sich selbst gebunden ist, kann `Db` frei auf seinen schrottigen Code zugreifen. Ich meide `this` wie eine dreckige Windel. Dafür gibt es keinen Grund, wenn man funktionalen Code schreibt. Wie dem auch sei, wenn Du andere Libraries verwendest, musst Du die bescheuerte Welt um uns herum akzeptieren.
 
-Mancher wird sagen, dass `this` besser für die Performance ist. Wenn Du zu der micro-optimization Fraktion gehörst, mach dieses Buch zu. Falls Du Dein Geld nicht zurück bekommst, kannst du es vielleicht gegen etwas fummeligeres eintauschen.
+Mancher wird sagen, dass `this` besser für die Performance ist. Wenn Du zu der micro-optimization Fraktion gehörst, mach dieses Buch bitte zu. Falls Du Dein Geld nicht zurück bekommst, kannst du es vielleicht gegen etwas fummeligeres eintauschen.
 
 Und jetzt sind wir soweit, dass wir fort fahren können.
 
-[Chapter 3: Pure Happiness with Pure Functions](ch3.md)
+[Kapitel 3: Pures Vergnügen mit Pure Functions](ch3-de.md)
