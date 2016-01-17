@@ -1,17 +1,17 @@
-# Chapter 3: Pures Vergnügen mit Pure Functions
+# Kapitel 3: Pures Vergnügen mit Pure Functions
 
 ## Endlich wieder pur
 
-Eine Sache die wir klar stellen müssen, ist die Idee einer reinen Funktion (pure function).
+Eine Sache die wir klar stellen müssen, ist die Idee einer Pure Function.
 
->Eine pure function ist eine Funktion die mit der selben Eingabe immer die gleiche Ausgabe produzieren wird und keinerlei beobachtbaren Seiteneffekt hat.
+>Eine Pure Function ist eine Funktion die mit der selben Eingabe immer die gleiche Ausgabe produzieren wird und keinerlei beobachtbaren Seiteneffekt hat.
 
-Nehmen wir `slice` und `splice`. Dies sind zwei Funktionen, die genau das gleiche tun - auf sehr unterschiedliche Weise, aber doch eben doch das gleiche. Wir sagen `slice` ist *pur* weil sie für jedes mal für jeden input den gleichen output liefert - garantiert. `splice` hingegen wird sein array einmal durchkauen und dann völlig verändert wieder ausspucken, was ein sichtbarer Effekt ist.
+Nehmen wir `slice` und `splice`. Diese zwei Funktionen machen genau das Gleiche - auf sehr unterschiedliche Weise, also eben doch nicht genau das Gleiche. Wir sagen `slice` ist *pure* weil sie bei jedem Aufruf für jeden Input den gleichen Output liefert - garantiert. `splice` hingegen wird sein Array einmal durchkauen und dann völlig verändert wieder ausspucken, was man deutlich sehen kann.
 
 ```js
 var xs = [1,2,3,4,5];
 
-// pur
+// pure
 xs.slice(0,3);
 //=> [1,2,3]
 
@@ -22,7 +22,7 @@ xs.slice(0,3);
 //=> [1,2,3]
 
 
-// nicht pur
+// impure
 xs.splice(0,3);
 //=> [1,2,3]
 
@@ -33,7 +33,7 @@ xs.splice(0,3);
 //=> []
 ```
 
-In der Funktionalen Programmierung mögen wir so unhandliche Funktionen wie `splice` gar nicht, die Daten *mutieren*. Wir streben nach verlässlichen Funktionen, die jedes mal das gleiche Ergebnis zurück liefern und nicht Funktionen wie `splice` die hinter sich eine Spur der Verwüstung zurück lassen.
+In der Funktionalen Programmierung mögen wir so unhandliche Funktionen wie `splice` gar nicht. Denn solche Funktionen *mutieren* Daten. Wir streben nach verlässlichen Funktionen, die jedes mal das gleiche Ergebnis zurück liefern und nicht Funktionen wie `splice` die hinter sich eine Spur der Verwüstung zurück lassen.
 
 Schauen wir uns noch ein anderes Beispiel an.
 
@@ -55,11 +55,11 @@ var checkAge = function(age) {
 ```
 
 
-In der unreinen Variante hängt `checkAge` von der veränderlichen Variable `minimum` ab um das Ergebnis zu ermitteln. Mit anderen Worten, es hängt vom Systemzustand ab, was enttäuscht, da wieder mehr Hirnschmalz benötigt wird um eine externe Umgebung zuberücksichtigen.
+In der impure Variante hängt `checkAge` von der veränderlichen Variable `minimum` ab um das Ergebnis zu ermitteln. Mit anderen Worten, es hängt vom Systemzustand ab. Das ist sehr ungünstig, da wieder mehr Hirnschmalz benötigt wird um eine externe Umgebung zu berücksichtigen.
 
-Das scheint in diesem Beispiel nicht viel auszumachen, aber die Abhängigkeit von einem Zustand tragt mit am meisten zur Systemkoplexität bei(http://www.curtclifton.net/storage/papers/MoseleyMarks06a.pdf). Dieses `checkAge` kann zu unterschiedlichen Ergebnissen führen, abhängig von Faktoren die nichts mit dem Input zu tun haben. Das disqualifiziert die Funktion nicht nur als pur Function, sie erfordert auch höhere Aufmerksamkeit bei der Analyse der Software.
+Das scheint in diesem Beispiel nicht viel auszumachen. Aber die Abhängigkeit von einem Zustand trägt hauptsächlich zur Systemkomplexität bei(siehe hierzu: http://www.curtclifton.net/storage/papers/MoseleyMarks06a.pdf). Dieses `checkAge` kann zu unterschiedlichen Ergebnissen führen, abhängig von Faktoren die nichts mit dem Input zu tun haben. Das disqualifiziert die Funktion nicht nur als Pure Function, sie erfordert auch höhere Aufmerksamkeit bei der Analyse der Software.
 
-Die reine Form andererseits ist völlig autark. Genauso können wir `minimum` unveränderlich machen, was ebenso die Reinheit sichert, da der Zustand sich nie ändert. Dafür müssen wir ein Objekt definieren um zu "freezen"
+Die pure Form andererseits ist völlig autark. Ebenso können wir `minimum` unveränderlich machen, was genauso die Reinheit sichert, da der Zustand sich nie ändert. Dafür müssen wir ein Objekt definieren um zu "freezen"
 
 ```js
 var immutableState = Object.freeze({
@@ -70,11 +70,11 @@ var immutableState = Object.freeze({
 ## Seiteneffekte beinhalten auch...
 
 
-Wir wollen diese "Seiteneffeke" nochmal ansehen um unsere Intuition zu verbessern. Was sind also diese zweifelsohne ruchlosen *Seiteneffekte* die in der Defintion von *reinen Funktionen* vorkommen? Mit *Effekt* meinen wir alles was durch die Funktionsverarbeitung passieren kann, das nichts mit der eigentlichen Berechnung zu tun hat.
+Wir wollen diese "Seiteneffeke" nochmal genauer betrachten um unsere Intuition zu schulen. Was sind also diese zweifelsohne ruchlosen *Seiteneffekte* die in der Defintion von *Pure Functions* vorkommen? Mit *Effekt* meinen wir alles was durch die Funktionsverarbeitung passiert, das nichts mit der eigentlichen Berechnung zu tun hat.
 
-Es gibt nichts intrinsisch schlechtes über Effekte zu sagen. Wir verwenden sie ständig auf den kommenden Seiten. Es ist dieses *Seiten...* teil, der negativ konnotîert ist. Ein Gewässer alleine ist noch kein Inkubator für Larven, es ist der *stehende* Teil der die Mückenschwärem hervorbringt. Und ich versichere Dir,  dass *Seiten*effekte ein ähnlicher Nährboden in Deinen Programmen ist.
+Es gibt an sich nichts schlechtes über Effekte zu sagen. Wir verwenden sie ständig auf den kommenden Seiten. Es ist dieser *Seiten...*-Anteil, der problematisch ist. Ein Gewässer alleine ist noch keine Brutstätte für Larven, es ist das *stehende* Gewässer, das die Mückenschwärme hervorbringt. Und ich versichere Dir, dass *Seiten*effekte ein ähnlich ungünstiger Nährboden in Deinen Programmen ist.
 
->Ein *Seiteneffekt* ist eine Änderung des Systemstatus oder *sichtbare Auswirkung* mit der Außenwelt, die während der Berechnung eines Ergebnisses passiert.
+>Ein *Seiteneffekt* ist eine Änderung des Systemstatus oder *sichtbare Wechselwirkung* mit der Außenwelt, die während der Berechnung eines Ergebnisses passiert.
 
 Seiteneffekte können, müssen aber nicht, folgende Aspekte beeinhalten:
 
@@ -85,15 +85,15 @@ Seiteneffekte können, müssen aber nicht, folgende Aspekte beeinhalten:
   * Bildschirm Ausgaben / Logging
   * Usereingaben verarbeiten
   * DOM abfragen
-  * System status einlesen
+  * System Status einlesen
 
 Diese Liste ist bei weitem nicht vollständig. Jede Interaktion mit der Welt außerhalb einer Funktion ist ein Seiteneffekt, was den Verdacht erregt ob man überhaupt ohne sie praktisch programmieren kann. Die Philosophie Funktionaler Programmierung postuliert, das Seiteneffekte der Hauptgrund für inkorrektes Verhalten sind.
 
 Es ist nicht verboten sie zu nutzen, eher wollen wir sie in einer kontrollierten Weise verwenden. Wir werden lernen , wie das geht, wenn wir in späteren Kapiteln auf Fuktoren und Monaden zu sprechen kommen. Für's erste wollen wir erstmal diese heimtückischen Funktionen von unseren reinen Funktionen aussondern.
 
-Seiteffekte schließen eine Funktion davon aus *rein* zu sein. Und das macht Sinn: reine Funktionen müssen per definition bei gleichem input immer den gleichen output liefer, was nicht gewährleistet ist, wenn auf Dinge bezug genommne wird, die außerhalb der lokalen Funktion sind.
+Seitenffekte bewirken, daß eine Funktion *impure* wird. Und das macht Sinn: Pure Functions müssen per definition bei gleichem Input immer den gleichen Output liefern. Das ist nicht gewährleistet, wenn auf Dinge Bezug genommnen wird, die außerhalb des lokalen Function Scope sind.
 
-Lass uns genauer untersuchen, warum bei gleichem input der gleiche output so wichtig ist. Schlag den Kragen auf, wir machne jetzt 8. Klasse Mathematik.
+Wir wollen noch genauer untersuchen, warum es so wichtig ist, dass bei gleichem Input der gleiche Output zu erhalten. Zieh Dich warm an, wir machen jetzt 8. Klasse Mathematik.
 
 ## 8. Klasse Mathe
 
@@ -102,26 +102,25 @@ Von mathisfun.com:
 > Eine Funktion ist eine spezielle Beziehung zwischen Werten:
 > Jeder ihrer Eingabewerte liefert genau einen Ausgabewert
 
-Mit anderen Worten, sie ist nur eine Relation zwisch zwei Werten: dem Input und dem Output. Obwohl jede Eingabe genau eine Ausgabe hat, heißt das nicht, dass die Ausgabe eindeutig pro Eingabe sein muss.
-In other words, it's just a relation between two values: the input and the output. Though each input has exactly one output, that output doesn't necessarily have to be unique per input. Below shows a diagram of a perfectly valid function from `x` to `y`;
+Mit anderen Worten, sie ist nur eine Relation zwischen zwei Werten: dem Input und dem Output. Obwohl jede Eingabe genau eine Ausgabe hat, heißt das nicht, dass die Ausgabe eindeutig pro Eingabe sein muss. Das unten stehende Diagram zeigt eine absolut valide Funktion von `x` nach `y`;
 
 <img src="images/function-sets.gif" />(http://www.mathsisfun.com/sets/function.html)
 
-To contrast, the following diagram shows a relation that is *not* a function since the input value `5` points to several outputs:
+Im Gegensatz dazu zeigt das folgende Diagram eine Beziehung, die *keine* Funktion darstellt, da der Eingabewert `5` mehrere Ausgaben aufweist:
 
 <img src="images/relation-not-function.gif" />(http://www.mathsisfun.com/sets/function.html)
 
-Functions can be described as a set of pairs with the position (input, output): `[(1,2), (3,6), (5,10)]` (It appears this function doubles its input).
+Funktionen können als eine Menge von Paaren beschrieben werden, mit den Koordinaten (Input, Output): `[(1,2), (3,6), (5,10)]` (Es sieht so aus, als würde diese Funktion Ihre Eingaben verdoppeln).
 
-Or perhaps a table:
+Oder vielleicht als Tabelle
 <table> <tr> <th>Input</th> <th>Output</th> </tr> <tr> <td>1</td> <td>2</td> </tr> <tr> <td>2</td> <td>4</td> </tr> <tr> <td>3</td> <td>6</td> </tr> </table>
 
-Or even as a graph with `x` as the input and `y` as the output:
+Oder sogar ein Graph mit `x` als Eingabe und `y` als Ausgabe:
 
 <img src="images/fn_graph.png" width="300" height="300" />
 
 
-There's no need for implementation details if the input dictates the output. Since functions are simply mappings of input to output, one could simply jot down object literals and run them with `[]` instead of `()`.
+Implementierungsdetails spielen keine Rolle wenn der Input den Output diktiert. Da Funktionen einfache Abbildungen von Eingaben auf Ausgaben sind, könnte man auch einfach Objekt Literale definieren und sie mit `[]` statt mit `()` aufrufen.
 
 ```js
 var toLowerCase = {"A":"a", "B": "b", "C": "c", "D": "d", "E": "e", "D": "d"};
@@ -135,15 +134,15 @@ isPrime[3];
 //=> true
 ```
 
-Of course, you might want to calculate instead of hand writing things out, but this illustrates a different way to think about functions. (You may be thinking "what about functions with multiple arguments?". Indeed, that presents a bit of an inconvenience when thinking in terms of mathematics. For now, we can bundle them up in an array or just think of the `arguments` object as the input. When we learn about *currying*, we'll see how we can directly model the mathematical definition of a function.)
+Natürlich berechnet man lieber ein Ergebnis, als das man alle ausschreibt. Aber so kann man Funktionen auch betrachten. (Du wirst jetzt sicher denken "Und was ist mit Funktionen die mehrere Argumente benötigen?" Sicher, das passt noch nicht ganz in die mathematische Betrachtungsweise. Für's erste können wir mehrere Parameter als einen Eingabeparameter in Form eines Arrays oder auch als das `arguments` Objekt betrachten. Wenn wir *currying* kennen lernen werden, wird deutlich werden, wie wir Funktionen modellieren können, dass sie der mathematischen Definition gerecht werden.)
 
-Here comes the dramatic reveal: Pure functions *are* mathematical functions and they're what functional programming is all about. Programming with these little angels can provide huge benefits. Let's look at some reasons why we're willing to go to great lengths to preserve purity.
+Hier kommt die dramaturgische Wendung: Pure Functions *sind* mathematische Funktionen und sie dreht sich alles in Funktionaler Programmierung. Mit diesen kleinen Engeln zu programmieren kann rießige Vorteile bringen. Untersuchen wir ein paar Gründe warum es so wichtig ist die Purity sicher zu stellen.
 
-## The case for purity
+## Ein Plädoyer für Purity
 
 ### Cacheable
 
-For starters, pure functions can always be cached by input. This is typically done using a technique called memoization:
+Zum Anfang, Pure Functions können immer anhand des Inputs gecacht werden. Dies macht man typischerweise mit einer Technik namens memoization:
 
 ```js
 var squareNumber  = memoize(function(x){ return x*x; });
@@ -151,17 +150,17 @@ var squareNumber  = memoize(function(x){ return x*x; });
 squareNumber(4);
 //=> 16
 
-squareNumber(4); // returns cache for input 4
+squareNumber(4); // liefert das gecachte Ergebnis für die Eingabe 4
 //=> 16
 
 squareNumber(5);
 //=> 25
 
-squareNumber(5); // returns cache for input 5
+squareNumber(5); // liefert das gecachte Ergebnis für die Eingabe 5
 //=> 25
 ```
 
-Here is a simplified implementation, though there are plenty of more robust versions available.
+Hier mal eine kleine Implementierung, obwohl es jede Menge robustere Versionen gibt...
 
 ```js
 var memoize = function(f) {
@@ -175,7 +174,7 @@ var memoize = function(f) {
 };
 ```
 
-Something to note is that you can transform some impure functions into pure ones by delaying evaluation:
+Was man sich merken sollte ist, dass man Impure Functions in Pure Functions transformieren kann, in dem man ihre Ausführung verzögert.
 
 ```js
 var pureHttpCall = memoize(function(url, params){
@@ -183,15 +182,15 @@ var pureHttpCall = memoize(function(url, params){
 });
 ```
 
-The interesting thing here is that we don't actually make the http call - we instead return a function that will do so when called. This function is pure because it will always return the same output given the same input: the function that will make the particular http call given the `url` and `params`.
+Interessant ist, dass wir hier eigentlich den http-Aufruf nicht ausführen - stattdessen liefern wir eine Funktion zurück die das bei ihrem Aufruf erledigt. Diese Funktion ist Pure weil sie bei gegebenem Input immer das gleiche Ergebnis abliefert: Die Funktion, die den entsprechenden http Aufruf mit den gegebenen `url` und `params` durchführt.
 
-Our `memoize` function works just fine, though it doesn't cache the results of the http call, rather it caches the generated function.
+Unsere `memoize` Funktion arbeitet wunderbar, obwohl sie nicht das Ergebnis des http Aufrufs cacht, sondern sie cacht die generierte Funktion.
 
-This is not very useful yet, but we'll soon learn some tricks that will make it so. The takeaway is that we can cache every function no matter how destructive they seem.
+Das ist noch nicht wirklich nützlich, aber wir werden bald mehr Tricks kennen lernen, die den Nutzen aufzeigen werden. Was wir uns merken sollten ist, dass wir jede Funktion cachen können, egal wie destruktiv sie sein mag.
 
-### Portable / Self-Documenting
+### Portierbar, Selbsterklärend
 
-Pure functions are completely self contained. Everything the function needs is handed to it on a silver platter. Ponder this for a moment... How might this be beneficial? For starters, a function's dependencies are explicit and therefore easier to see and understand - no funny business going on under the hood.
+Pure Functions sind komplett unabhängig. Alles was die Funktion benötigt, wird ihr auf einem Silbertablett übergeben. Lass das mal auf Dich wirken... Wie könnte man davon profitiern? Zum Anfang: die Abhängikeiten einer Funktion sind explizit und deshalb leichter zu erkennen - kein schräges Gedöns unter der Haube.
 
 ```js
 //impure
@@ -209,29 +208,30 @@ var signUp = function(Db, Email, attrs) {
 };
 ```
 
-The example here demonstrates that the pure function must be honest about its dependencies and, as such, tell us exactly what it's up to. Just from its signature, we know that it will use a `Db`, `Email`, and `attrs` which should be telling to say the least.
+Das Beispiel hier demonstriert, dass pure Functions ehrlich bezüglich iherer Abhängigkeiten sind und uns so auch genau sagen, was sie tun. Alleine aus der Signatur erkennen wir dass wir ein `Db`, ein `Email`und `attrs` nutzen was schon mal das Wichtigste klar stellt.
 
-We'll learn how to make functions like this pure without merely deferring evaluation, but the point should be clear that the pure form is much more informative than its sneaky impure counterpart which is up to God knows what.
+Wir werden lernen, Funktionen genauso Pure zu machen, ohne die Ausführung zu verzögern. Aber klar sollte sein, dass die Pure Form viel informativer ist, als sein hinterlistiger unreiner counterpart, der Gott weiß was tut.
 
-Something else to notice is that we're forced to "inject" dependencies, or pass them in as arguments, which makes our app much more flexible because we've parameterized our database or mail client or what have you (don't worry, we'll see a way to make this less tedious than it sounds). Should we choose to use a different Db we need only to call our function with it. Should we find ourselves writing a new application in which we'd like to reuse this reliable function, we simply give this function whatever `Db` and `Email` we have at the time.
+Außerdem fällt auf, dass wir gezwungen sind Abhängigkeiten zu "injecten", oder sie als Argumente zu übergeben. Das macht unsere App viel flexibler, weil wir unsere Datenbank, unseren Mail Client oder was auch immer parametrisiert haben. (Keine Angst, wir werden einen Weg finden, das weit weniger umständlich zu machen als es klingt.) Vielleicht werden wir irgendwann eine andere Db nutzen die wir unserer Funktion übergeben wollen. Vielleicht schreiben wir irgendwann eine neue Applikation in der wir diese verlässliche Funktion wiederverwenden wollen, an die wir schlicht das `Db` und `Email` übergeben, dass wir zu dem Zeitpunkt verwenden.
 
-In a JavaScript setting, portability could mean serializing and sending functions over a socket. It could mean running all our app code in web workers. Portability is a powerful trait.
+Im JavaScript Umfeld kann Portabilität das Serialisieren und über einen Socket senden bedeuten. Es kann bedeuten unseren ganzen App Code in WebWorkern laufen zu lassen. Portierbarkeit ist ein wertvolles Gut.
 
-Contrary to "typical" methods and procedures in imperative programming rooted deep in their environment via state, dependencies, and available effects, pure functions can be run anywhere our hearts desire.
+Im Gegensatz zur imperativen Programmierung, in der typische Methoden und Prozeduren tief mit ihrer Umgebung durch den Zustand, den Abhängigkeiten und verfügbaren Effekten verwurzelt sind, können Pure Functions überall laufen wo es uns beliebt.
 
-When was the last time you copied a method into a new app? One of my favorite quotes comes from Erlang creator, Joe Armstrong: "The problem with object-oriented languages is they’ve got all this implicit environment that they carry around with them. You wanted a banana but what you got was a gorilla holding the banana... and the entire jungle".
+Wann hast Du das letzte Mal eine Methode in eine neue App kopiert? Eines meiner Lieblingszitate kommt von dem Erfinder von Erlang, Joe Armstrong: "Das Problem mit objektorientierten Sprachen ist, dass sie implizit immer ihre Umgebung mit sich herumtragen. Wenn Du eine Banane willst, bekommst Du statt dessen den Gorilla der die Banane hält... und den ganzen Dschungel".
 
-### Testable
+### Testbarkeit
 
-Next, we come to realize pure functions make testing much easier. We don't have to mock a "real" payment gateway or setup and assert the state of the world after each test. We simply give the function input and assert output.
+Als nächstes stellen wir fest, dass Pure Functions viel leichter zu testen sind. Wir müssen kein "echtes" Payment Gateway oder Setup weg mocken und den Zustand der Welt nach jedem Test prüfen. Wir geben der Funktion einfach Input und überprüfen den Output.
 
-In fact, we find the functional community pioneering new test tools that can blast our functions with generated input and assert that properties hold on the output. It's beyond the scope of this book, but I strongly encourage you to search for and try *Quickcheck* - a testing tool that is tailored for a purely functional environment.
 
-### Reasonable
+Genaugenommen beobachten wir gerade, wie die funktionale Gemeinschaft neue Testtools an den Start bringt, die unsere Funktionen mit generiertem Input bombardieren und sicherstellen dass der Output bestimmte Eigenschaften erfüllt. Es würde den Rahmen des Buches sprengen, aber ich empfehle sehr nach *Quickcheck* zu suchen - einem Test Tool das für rein Funktionale Umgebungen zugeschnitten ist.
 
-Many believe the biggest win when working with pure functions is *referential transparency*. A spot of code is referentially transparent when it can be substituted for its evaluated value without changing the behavior of the program.
+### Nachvollziehbar
 
-Since pure functions always return the same output given the same input, we can rely on them to always return the same results and thus preserve referential transparency. Let's see an example.
+Viele glauben, der größte Gewinn durch das Arbeiten mit Pure Functions ist *referenzielle Transparenz*. Ein Stück Code ist referenziell transparent, wenn er durch seinen evaluierten Wert ersetzt werden kann ohne das Verhalten des Programms zu verändern.
+
+Da Pure Functions immer den gleichen Output zurückliefern wenn sie den gleichen Input erhalten, können wir uns darauf verlassen, dass sie immer die selben Ergebnisse zurück liefern. Damit ist die referentielle Transparenz sichergestellt ist. Schauen wir uns ein Beispiel an.
 
 ```js
 
@@ -260,9 +260,9 @@ punch(jobe, michael);
 //=> Immutable.Map({name:"Michael", hp:19, team: "green"})
 ```
 
-`decrementHP`, `isSameTeam` and `punch` are all pure and therefore referentially transparent. We can use a technique called *equational reasoning* wherein one substitutes "equals for equals" to reason about code. It's a bit like manually evaluating the code without taking into account the quirks of programmatic evaluation. Using referential transparency, let's play with this code a bit.
+`decrementHP`, `isSameTeam` und `punch` sind alle Pure und daher referentiell transparent. Wir können eine Technik namens *equational reasoning* anwenden, bei der ein "Istgleich ein Istgleich" ersetzt um über den Code nachzudenken. Man könnte beinahe sagen, dass wir dann den Code selbst auswerten können ohne die Probleme der programmatischen Auswertung zu haben. Referentielle Transparenz zu nutzen heißt mit dem Code zu spielen.
 
-First we'll inline the function `isSameTeam`.
+Zu erst werden wir die `isSameTeam` Funktion inlinen.
 
 ```js
 var punch = function(player, target) {
@@ -274,7 +274,7 @@ var punch = function(player, target) {
 };
 ```
 
-Since our data is immutable, we can simply replace the teams with their actual value
+Da unsere Daten unveränderlich sind, können wir einfach die Teams mit ihrem eigentlichen Wert ersetzen
 
 ```js
 var punch = function(player, target) {
@@ -286,7 +286,7 @@ var punch = function(player, target) {
 };
 ```
 
-We see that it is false in this case so we can remove the entire if branch
+Wir sehen, dass sich in diesem Fall false ergibt, daher können wir den kompletten if-Zweig entfernen.
 
 ```js
 var punch = function(player, target) {
@@ -295,7 +295,7 @@ var punch = function(player, target) {
 
 ```
 
-And if we inline `decrementHP`, we see that, in this case, punch becomes a call to decrement the `hp` by 1.
+Und wenn wir `decrementHP` inlinen, sehen wir dass in diesem Fall aus punch ein Aufruf wird, der `hp`um 1 verringert.
 
 ```js
 var punch = function(player, target) {
@@ -303,19 +303,19 @@ var punch = function(player, target) {
 };
 ```
 
-This ability to reason about code is terrific for refactoring and understanding code in general. In fact, we used this technique to refactor our flock of seagulls program. We used equational reasoning to harness the properties of addition and multiplication. Indeed, we'll be using these techniques throughout the book.
+Diese Fähigkeit so Code zu durchdenken ist grandios für Refactoring und das Codeverständnis im Allgemeinen. Genaugenommen haben wir diese Technik genutzt um unser Möwenprogramm zu refactoren. Wir nutzten equational reasoning um die Eigenschaft  von Addition und Multiplikation zu extrahieren. Tatsächlich werden wir diese Techniken im ganzen Buch verwenden.
 
-### Parallel Code
+### Paralleler Code
 
-Finally, and here's the coup de grâce, we can run any pure function in parallel since it does not need access to shared memory and it cannot, by definition, have a race condition due to some side effect.
+Zuletzt hab ich noch ein Sahnehäubchen, wir können jede Pure Function parallel laufen lassen, weil sie keinen Speicher aufrufen muss der noch von anderen Genutzt wird und kann per Definition keine Raceconditions wegen irgendwelcher Seiteneffekte produzieren.
 
-This is very much possible in a server side js environment with threads as well as in the browser with web workers though current culture seems to avoid it due to complexity when dealing with impure functions.
+Das ist besonders in einer Serverumgebung mit Threads möglich, aber auch im Browser mit WebWorkern. Trotzdem vermeiden dies die meisten, weil sie die Komplexität bei Arbeiten mit Impure Functions befürchten.
 
 
-## In Summary
+## Zusammenfassung
 
-We've seen what pure functions are and why we, as functional programmers, believe they are the cat's evening wear. From this point on, we'll strive to write all our functions in a pure way. We'll require some extra tools to help us do so, but in the meantime, we'll try to separate the impure functions from the rest of the pure code.
+Wir haben gesehen was pure Functions sind und warum wir, als funktionale Programmierer, sie für die Stiefel des gestiefelten Katers halten. Ab hier streben wir danach alle unsere Funktionen Pure zu schreiben. Wir werden ein paar extra Tools kennen lernen um uns zu helfen. Aber in der Zwischenzeit werden wir die Impure Functions vom Rest des Codes extrahieren.
 
-Writing programs with pure functions is a tad laborious without some extra tools in our belt. We have to juggle data by passing arguments all over the place, we're forbidden to use state, not to mention effects. How does one go about writing these masochistic programs? Let's acquire a new tool called curry.
+Programme mit Pure Functions zu schreiben ist ein bisschen umständlich ohne extra Tools in unserem Werkzeugkasten. Wir müssen mit Daten jonglieren und haben das Verbot Zustände zu verwenden ganz zu schweigen von Effekten. Wie tickt jemand, der so masochistische Programme schreibt? Wir brauchen ein neues Tool namens curry.
 
-[Chapter 4: Currying](ch4.md)
+[Kapitel 4: Currying](ch4-de.md)
